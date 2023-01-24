@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { getPhotos } from '../hook';
 
+// gris estilo pinterest
+// @react-native-seoul/masonry-list
+
 export default function Home() {
 
   const [search, setSearch] = useState('')
