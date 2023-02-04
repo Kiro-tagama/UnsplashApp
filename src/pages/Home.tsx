@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import MasonryList from '@react-native-seoul/masonry-list'
-// import { getPhotos } from '../hook';
+import { FlatList, Image, StyleSheet, Text, TextInput, ScrollView, View, TouchableOpacity } from 'react-native';
+import { RefreshControl } from 'react-native-gesture-handler';
+import { getPhotos } from '../hook';
+import { Ionicons } from '@expo/vector-icons';
 
 // gris estilo pinterest
 // @react-native-seoul/masonry-list
@@ -10,22 +11,23 @@ export default function Home() {
 
   const [search, setSearch] = useState('')
 
-  // const [arr] = getPhotos(search.length>=1 ? search : null)
+  const [...arr] = getPhotos(search.length >=1 ? search : null)
 
-  const arr=[
-    "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
-    "https://cdn.pixabay.com/photo/2014/02/27/16/10/flowers-276014__340.jpg",
-    "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
-    "https://cdn.pixabay.com/photo/2014/02/27/16/10/flowers-276014__340.jpg",
-    "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
-    "https://cdn.pixabay.com/photo/2014/02/27/16/10/flowers-276014__340.jpg",
-    "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
-    "https://cdn.pixabay.com/photo/2014/02/27/16/10/flowers-276014__340.jpg",
-  ]
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   function Card({img}){
     return(
-        <Text>{img}</Text>
+      <Image
+        source={{uri:img}}
+        style={styles.img}
+      />
     )
   }
 
@@ -38,21 +40,18 @@ export default function Home() {
           value={search}
           onChangeText={txt=>setSearch(txt)}
         />
-        <Text>x</Text>
+        <TouchableOpacity onPress={()=>setSearch('')}>
+          <Ionicons name="ios-close" size={24} color="black" />
+        </TouchableOpacity>
       </View>
-      <View>
-        <MasonryList
-          style={{alignSelf: 'stretch'}}
-          contentContainerStyle={{
-            paddingHorizontal: 24,
-            alignSelf: 'stretch',
-          }}
-          data={["1","2","3","4","5","6","7","8","9"]}
-          keyExtractor={(item): string => item.id}
+      <View style={{marginTop:10, flex:1}}>
+        <FlatList
+          data={arr}
+          renderItem={({item}) => <Card img={item.links.download}/>}
+          keyExtractor={(item, index)=>item.id || index}
           numColumns={2}
           showsVerticalScrollIndicator={false}
-          renderItem={({item}) => <Card img={item}/>}
-          onEndReachedThreshold={0.1}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
         />
       </View>
     </View>
@@ -62,8 +61,8 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop:30,
-    padding:20,
+    marginTop:40,
+    paddingHorizontal:20,
     fontSize:18
   },
   input:{
@@ -84,7 +83,20 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   img:{
-    height:20,
-    width:20
+    backgroundColor:"#3337",
+    height:250,
+    width:"48.5%",
+    borderRadius:16,
+    margin:3,
+
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 10,
   }
 });
