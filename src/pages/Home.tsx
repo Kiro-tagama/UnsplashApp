@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { FlatList, Image, StyleSheet, Text, TextInput, ScrollView, View, TouchableOpacity } from 'react-native';
-import { RefreshControl } from 'react-native-gesture-handler';
+import { FlatList, StyleSheet, TextInput, View, TouchableOpacity, RefreshControl } from 'react-native';
+
+import Card from '../components/Card';
 import { getPhotos } from '../hook';
 import { Ionicons } from '@expo/vector-icons';
-
-// gris estilo pinterest
-// @react-native-seoul/masonry-list
+import Info from '../components/Info';
 
 export default function Home() {
 
@@ -22,17 +21,8 @@ export default function Home() {
     }, 2000);
   }, []);
 
-  function Card({img}){
+  const input=()=>{
     return(
-      <Image
-        source={{uri:img}}
-        style={styles.img}
-      />
-    )
-  }
-
-  return (
-    <View style={styles.container}>
       <View style={styles.input}>
         <TextInput
           placeholder='Pesquisar...'
@@ -40,14 +30,27 @@ export default function Home() {
           value={search}
           onChangeText={txt=>setSearch(txt)}
         />
-        <TouchableOpacity onPress={()=>setSearch('')}>
-          <Ionicons name="ios-close" size={24} color="black" />
-        </TouchableOpacity>
+        {search.length>=1?
+          <TouchableOpacity onPress={()=>setSearch('')}>
+            <Ionicons name="ios-close" size={24} color="black" />
+          </TouchableOpacity>
+          :null
+        }
       </View>
+    )
+  }
+  
+  return (
+    <View style={styles.container}>
+      {input()}
       <View style={{marginTop:10, flex:1}}>
         <FlatList
           data={arr}
-          renderItem={({item}) => <Card img={item.links.download}/>}
+          renderItem={({item}) => <Card thumb={item.urls.small} img={item.links.download} 
+            profile={{
+              name:item.user.name,
+              link:item.user.links.html
+            }}/>}
           keyExtractor={(item, index)=>item.id || index}
           numColumns={2}
           showsVerticalScrollIndicator={false}
@@ -62,7 +65,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop:40,
-    paddingHorizontal:20,
+    marginHorizontal:20,
     fontSize:18
   },
   input:{
@@ -81,22 +84,5 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
 
     elevation: 5,
-  },
-  img:{
-    backgroundColor:"#3337",
-    height:250,
-    width:"48.5%",
-    borderRadius:16,
-    margin:3,
-
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-
-    elevation: 10,
   }
 });
