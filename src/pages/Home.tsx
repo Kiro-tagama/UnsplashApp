@@ -47,10 +47,10 @@ export default function Home() {
         <FlatList
           data={arr}
           renderItem={({item}) => <Card thumb={item.urls.small} img={item.links.download} 
-            profile={{
-              name:item.user.name,
-              link:item.user.links.html
-            }}/>}
+          profile={{
+            name:item.user.name,
+            link:item.user.links.html
+          }}/>}
           keyExtractor={(item, index)=>item.id || index}
           numColumns={2}
           showsVerticalScrollIndicator={false}
