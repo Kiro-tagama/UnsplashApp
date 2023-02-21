@@ -11,7 +11,7 @@ export default function Selected({route}) {
 
   const [visible,setVisible]= useState(false)
 
-
+  console.log(route);
 
   return (
     <View style={styles.container}>
@@ -30,7 +30,7 @@ export default function Selected({route}) {
       animationType="slide"
       transparent={true}
       onBackgroundPress={() => setVisible(false)}>
-        <Info profile={{name:'dasd'}}/>
+        <Info profile={route.params.profile} img={route.params.img}/>
       </Modal>
 
     </View>

@@ -1,25 +1,15 @@
 import React, { useState } from 'react';
-import { FlatList, StyleSheet, TextInput, View, TouchableOpacity, RefreshControl } from 'react-native';
+import { FlatList, StyleSheet, TextInput, View, TouchableOpacity } from 'react-native';
 
 import Card from '../components/Card';
 import { getPhotos } from '../hook';
 import { Ionicons } from '@expo/vector-icons';
-import Info from '../components/Info';
 
 export default function Home() {
 
   const [search, setSearch] = useState('')
 
   const [...arr] = getPhotos(search.length >=1 ? search : null)
-
-  const [refreshing, setRefreshing] = useState(false);
-
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 2000);
-  }, []);
 
   const input=()=>{
     return(
@@ -54,7 +44,6 @@ export default function Home() {
           keyExtractor={(item, index)=>item.id || index}
           numColumns={2}
           showsVerticalScrollIndicator={false}
-          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
         />
       </View>
     </View>

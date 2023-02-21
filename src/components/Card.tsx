@@ -1,16 +1,24 @@
 import { useNavigation } from "@react-navigation/native";
+import { useState } from "react";
 import { TouchableOpacity, Image, StyleSheet } from "react-native";
+import { Modal } from "react-native-ui-lib";
+import Info from "./Info";
 
-export default function Card({thumb,img, profile}){
+interface CardProps{
+  thumb:string
+  img:string
+  profile:any
+}
+
+export default function Card({thumb,img, profile}: CardProps){
   const navigation = useNavigation()
-
-
+  const [visible,setVisible]= useState(false)
 
   return(
     <>
     <TouchableOpacity style={styles.img}
       onPress={()=> navigation.navigate("Selected", {img,profile})}
-      onLongPress={()=>console.log("modal aqui")}
+      onLongPress={()=>setVisible(true)}
       >
       <Image
         source={{uri:thumb}}
@@ -18,6 +26,13 @@ export default function Card({thumb,img, profile}){
         />
     </TouchableOpacity>
 
+    <Modal 
+      visible={visible} 
+      animationType="slide"
+      transparent={true}
+      onBackgroundPress={() => setVisible(false)}>
+      <Info profile={profile} img={img}/>
+    </Modal>
     </>
   )
 }
