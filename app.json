@@ -1,0 +1,34 @@
+{
+  "expo": {
+    "name": "unsplashApp",
+    "slug": "unsplashapp",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "unsplashapp",
+    "userInterfaceStyle": "automatic",
+    
+    "updates": {
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/4afd3d76-d3ba-47e5-9430-6ea562eb2b25"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.kirotagama.expotemplatetabs"
+    },
+    "android": {
+      "adaptiveIcon": {},
+      "package": "com.kirotagama.expotemplatetabs"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "4afd3d76-d3ba-47e5-9430-6ea562eb2b25"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    }
+  }
+}
