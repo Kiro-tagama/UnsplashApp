@@ -8,7 +8,7 @@ import * as MediaLibrary from 'expo-media-library';
 export default function Info({profile,img}){
 
   async function download() {
-    const file = FileSystem.documentDirectory + "teste"
+    const file = FileSystem.documentDirectory + "teste.png"
     const downloadFile: FileSystem.FileSystemDownloadResult = await FileSystem.downloadAsync(img , file)
 
     if (downloadFile.status != 200) {
