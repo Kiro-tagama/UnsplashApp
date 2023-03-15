@@ -20,7 +20,8 @@
     },
     "android": {
       "adaptiveIcon": {},
-      "package": "com.kirotagama.expotemplatetabs"
+      "package": "com.kirotagama.expotemplatetabs",
+      "permissions":["READ_EXTERNAL_STORAGE","WRITE_EXTERNAL_STORAGE","INTERNET"]
     },
     "extra": {
       "eas": {
