@@ -1,5 +1,5 @@
 # UnsplashApp
 
-objetivo: Criar um app estilo pinterest para baixar imagens do pinteres
+objetivo: Criar um app para baixar imagens da API UNSPLASH
 
 - TypeScript

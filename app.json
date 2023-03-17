@@ -6,7 +6,16 @@
     "orientation": "portrait",
     "scheme": "unsplashapp",
     "userInterfaceStyle": "automatic",
-    
+    "plugins": [
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow unsplashApp to access your photos.",
+          "savePhotosPermission": "Allow unsplashApp to save photos.",
+          "isAccessMediaLocationEnabled": true
+        }
+      ]
+    ],
     "updates": {
       "fallbackToCacheTimeout": 0,
       "url": "https://u.expo.dev/4afd3d76-d3ba-47e5-9430-6ea562eb2b25"
@@ -20,7 +29,8 @@
     },
     "android": {
       "adaptiveIcon": {},
-      "package": "com.kirotagama.expotemplatetabs"
+      "package": "com.kirotagama.expotemplatetabs",
+      "permissions":["READ_EXTERNAL_STORAGE","WRITE_EXTERNAL_STORAGE","INTERNET","MEDIA_LIBRARY"]
     },
     "extra": {
       "eas": {

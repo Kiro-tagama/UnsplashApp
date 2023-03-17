@@ -1,12 +1,37 @@
-import { Text, View , StyleSheet, TouchableOpacity, Linking } from "react-native"
+import { Text, View , StyleSheet, TouchableOpacity, Linking, ActivityIndicator } from "react-native"
 import { Feather } from '@expo/vector-icons';
 
-import * as fs from "expo-file-system";
+import * as FileSystem from "expo-file-system";
+import * as Permissions from 'expo-permissions';
+import * as MediaLibrary from 'expo-media-library';
+import { useState } from "react";
 
 export default function Info({profile,img}){
+  const [inSave, setInSave] = useState(false)
 
   async function download() {
-    console.log("em implementação");
+    // const perm = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
+    // if (perm.status != 'granted') {
+    //   return;
+    // }
+    // console.log(perm.status);
+    
+
+    setInSave(true)
+
+    const file = FileSystem.documentDirectory + "teste.png"
+    const downloadFile: FileSystem.FileSystemDownloadResult = await FileSystem.downloadAsync(img , file)
+
+
+    const asset = await MediaLibrary.createAssetAsync(downloadFile.uri);
+    const album = await MediaLibrary.getAlbumAsync('Download');
+    if (album == null) {
+      await MediaLibrary.createAlbumAsync('Download', asset, false);
+    } else {
+      await MediaLibrary.addAssetsToAlbumAsync([asset], album, false);
+    }
+
+    setInSave(false)
   }
 
   return(
@@ -25,9 +50,15 @@ export default function Info({profile,img}){
           <TouchableOpacity
             style={styles.bt}
             onPress={()=>download()}
+            disabled={inSave? true : false}
           >
-            <Feather name="download" size={24} color="black" />
-            <Text style={{marginLeft:10}}>Download</Text>
+            {inSave? 
+              <ActivityIndicator color="black"/>:
+              <>
+                <Feather name="download" size={24} color="black" />
+                <Text style={{marginLeft:10}}>Download</Text>
+              </>  
+            }
           </TouchableOpacity>
         </View>
       </View>
