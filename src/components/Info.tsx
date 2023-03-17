@@ -1,37 +1,12 @@
 import { Text, View , StyleSheet, TouchableOpacity, Linking } from "react-native"
 import { Feather } from '@expo/vector-icons';
 
-import * as FileSystem from "expo-file-system";
-import * as Permissions from 'expo-permissions';
-import * as MediaLibrary from 'expo-media-library';
+import * as fs from "expo-file-system";
 
 export default function Info({profile,img}){
 
   async function download() {
-    const file = FileSystem.documentDirectory + "teste"
-    const downloadFile: FileSystem.FileSystemDownloadResult = await FileSystem.downloadAsync(img , file)
-
-    if (downloadFile.status != 200) {
-      console.log('err');
-    }
-
-    const perm = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
-    if (perm.status != 'granted') {
-      return;
-    }
-
-    try {
-      const asset = await MediaLibrary.createAssetAsync(downloadFile.uri);
-      const album = await MediaLibrary.getAlbumAsync('Download');
-      if (album == null) {
-        await MediaLibrary.createAlbumAsync('Download', asset, false);
-      } else {
-        await MediaLibrary.addAssetsToAlbumAsync([asset], album, false);
-      }
-    } catch (e) {
-      console.log(e);
-      
-    }
+    console.log("em implementação");
   }
 
   return(

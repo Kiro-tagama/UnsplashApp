@@ -11,8 +11,6 @@ export default function Selected({route}) {
 
   const [visible,setVisible]= useState(false)
 
-  console.log(route);
-
   return (
     <View style={styles.container}>
       <Image source={{uri:route.params.img}} style={styles.img}/>
