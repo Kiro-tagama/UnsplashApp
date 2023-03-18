@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import {useState} from "react"
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { Ionicons,MaterialCommunityIcons } from '@expo/vector-icons';
 import Info from '../components/Info';
@@ -12,7 +12,8 @@ export default function Selected({route}) {
   const [visible,setVisible]= useState(false)
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,{backgroundColor:route.params.imgColor}]}>
+      <ActivityIndicator color={'#fff'} size="large" style={styles.act}/>
       <Image source={{uri:route.params.img}} style={styles.img}/>
 
       <TouchableOpacity style={[styles.bt,{top:40,left:20,}]} onPress={()=>navigation.goBack()}>
@@ -39,15 +40,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  act:{
+    position:"absolute",
+    left:"50%",right:'50%',
+    top:'50%',bottom:'50%'
+  },
   img:{
-    height:"100%",width:"100%"
+    height:"100%",width:"100%",
+    zIndex:1
   },
   bt:{
     padding:10,
     backgroundColor:"#fff",
     borderRadius:16,
     position:"absolute",
-    
+    zIndex:2,
 
     shadowColor: "#000",
     shadowOffset: {

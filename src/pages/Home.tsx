@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { FlatList, StyleSheet, TextInput, View, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 import Card from '../components/Card';
-import { getPhotos } from '../hook';
-import { Ionicons } from '@expo/vector-icons';
+import useGetPhotos from '../hook/useGetPhotos';
 
 export default function Home() {
 
   const [search, setSearch] = useState('')
-
-  const [...arr] = getPhotos(search.length >=1 ? search : null)
+  const [...arr] = useGetPhotos(search.length >=1 ? search : null)
 
   const input=()=>{
     return(
@@ -29,16 +28,18 @@ export default function Home() {
       </View>
     )
   }
-  
+
   return (
     <View style={styles.container}>
       {input()}
       <View style={{marginTop:10, flex:1}}>
         <FlatList
           data={arr}
-          renderItem={({item}) => <Card thumb={item.urls.small} img={item.links.download} 
+          renderItem={({item}) => <Card thumb={item.urls.small_s3} img={item.urls.full} 
+          imgColor={item.color}
           profile={{
             name:item.user.name,
+            location:item.user.location,
             link:item.user.links.html
           }}/>}
           keyExtractor={(item, index)=>item.id || index}

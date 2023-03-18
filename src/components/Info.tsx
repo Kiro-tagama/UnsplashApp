@@ -1,43 +1,47 @@
+import { useState } from "react";
 import { Text, View , StyleSheet, TouchableOpacity, Linking, ActivityIndicator } from "react-native"
 import { Feather } from '@expo/vector-icons';
 
 import * as FileSystem from "expo-file-system";
-import * as Permissions from 'expo-permissions';
 import * as MediaLibrary from 'expo-media-library';
-import { useState } from "react";
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+ 
 export default function Info({profile,img}){
   const [inSave, setInSave] = useState(false)
 
-  async function download() {
-    // const perm = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
-    // if (perm.status != 'granted') {
-    //   return;
-    // }
-    // console.log(perm.status);
-    
-
+  async function salvarImagem() {
     setInSave(true)
+    
+    // Verificar se a permissão já foi concedida anteriormente
+    const permissaoGaleria = await AsyncStorage.getItem('permissaoGaleria');
+    
+    if (permissaoGaleria === 'true') {
+      // Se a permissão já foi concedida, prosseguir com a operação de salvar a imagem
+      const file = FileSystem.documentDirectory + "teste.png";
+      const downloadFile: FileSystem.FileSystemDownloadResult = await FileSystem.downloadAsync(img , file);
+      MediaLibrary.createAssetAsync(downloadFile.uri);
 
-    const file = FileSystem.documentDirectory + "teste.png"
-    const downloadFile: FileSystem.FileSystemDownloadResult = await FileSystem.downloadAsync(img , file)
-
-
-    const asset = await MediaLibrary.createAssetAsync(downloadFile.uri);
-    const album = await MediaLibrary.getAlbumAsync('Download');
-    if (album == null) {
-      await MediaLibrary.createAlbumAsync('Download', asset, false);
     } else {
-      await MediaLibrary.addAssetsToAlbumAsync([asset], album, false);
+      // Se a permissão ainda não foi concedida, solicitar permissão ao usuário
+      const { status } = await MediaLibrary.requestPermissionsAsync();
+      if (status === 'granted') {
+        // Se o usuário conceder a permissão, armazenar o status e prosseguir com a operação de salvar a imagem
+        await AsyncStorage.setItem('permissaoGaleria', 'true'); 
+        salvarImagem();
+      } else {
+        alert('É necessário conceder permissão para acessar a galeria de mídia. Por favor, vá às configurações do aplicativo e conceda a permissão manualmente.');
+      }
     }
-
     setInSave(false)
+
   }
+  
 
   return(
       <View style={styles.modal} >
         <View style={styles.view}>
           <Text style={styles.txt}>{profile.name}</Text>
+          <Text style={[styles.txt,{fontSize:16,marginVertical:5}]}>{profile.location}</Text>
 
           <TouchableOpacity
             style={[styles.bt,{marginVertical:20}]}
@@ -49,7 +53,7 @@ export default function Info({profile,img}){
           
           <TouchableOpacity
             style={styles.bt}
-            onPress={()=>download()}
+            onPress={()=>salvarImagem()}
             disabled={inSave? true : false}
           >
             {inSave? 
@@ -80,8 +84,7 @@ const styles = StyleSheet.create({
   },
   txt:{
     textAlign:'center',
-    fontSize:20,
-    marginBottom:20
+    fontSize:20
   },
   bt:{
     flexDirection:'row',

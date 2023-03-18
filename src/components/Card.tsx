@@ -7,17 +7,18 @@ import Info from "./Info";
 interface CardProps{
   thumb:string
   img:string
+  imgColor:string
   profile:any
 }
 
-export default function Card({thumb,img, profile}: CardProps){
+export default function Card({thumb,img,imgColor, profile}: CardProps){
   const navigation = useNavigation()
   const [visible,setVisible]= useState(false)
 
   return(
     <>
     <TouchableOpacity style={styles.img}
-      onPress={()=> navigation.navigate("Selected", {img,profile})}
+      onPress={()=> navigation.navigate("Selected", {img,profile,imgColor})}
       onLongPress={()=>setVisible(true)}
       >
       <Image
